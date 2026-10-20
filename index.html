@@ -236,7 +236,12 @@ h1 em, h2 em { font-style: italic; }
 }
 .hero-head { grid-area: head; align-self: end; }
 .hero-stage { grid-area: stage; }
-.hero-body { grid-area: body; align-self: start; }
+.hero-body { grid-area: body; align-self: start; display: flex; flex-direction: column; }
+.hero-body .price-row { order: 1; margin-top: 0; }
+.hero-body .tiers-hero { order: 2; }
+.hero-body .cta-row { order: 3; margin-top: 16px; }
+.hero-body .lede { order: 4; margin-top: 24px; }
+.hero-body .trust { order: 5; }
 .lede { max-width: 33em; color: var(--smoke); font-size: clamp(1.05rem, 1.3vw, 1.2rem); line-height: 1.6; }
 .price-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; margin-top: 26px; }
 .price { font: 500 clamp(2rem, 3.2vw, 2.6rem)/1 var(--f-display); color: var(--ivory); }
@@ -251,11 +256,6 @@ h1 em, h2 em { font-style: italic; }
   .hero-grid { grid-template-columns: minmax(0, 1fr); grid-template-areas: "head" "stage" "body"; row-gap: 18px; }
   .spot { right: auto; left: 22%; width: 80%; }
   /* On phones the price and the order button come straight after the box, so they sit in the first screen */
-  .hero-body { display: flex; flex-direction: column; }
-  .hero-body .price-row { order: 1; margin-top: 0; }
-  .hero-body .cta-row { order: 2; margin-top: 18px; }
-  .hero-body .lede { order: 3; margin-top: 26px; }
-  .hero-body .trust { order: 4; }
 }
 @media (max-width: 480px) { .cta-row .btn { flex: 1 1 100%; } }
 
@@ -479,6 +479,10 @@ h1 em, h2 em { font-style: italic; }
   box-shadow: inset 0 0 0 1px var(--line-2);
 }
 .tiers { display: grid; gap: 10px; margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--line); }
+.tiers-hero { max-width: 34em; margin-top: 16px; padding-top: 0; border-top: 0; gap: 8px; }
+.tiers-hero .tier { padding: 10px 14px; }
+.tiers-hero .tier-name { font-size: 1.02rem; }
+.tiers-hero .tier-price b { font-size: 1.15rem; }
 .tiers-label { font-size: var(--t-xs); font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); }
 .tier {
   position: relative; display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-radius: 12px; cursor: pointer;
@@ -504,8 +508,6 @@ h1 em, h2 em { font-style: italic; }
 .tier-price b { font: 500 1.3rem/1 var(--f-display); font-variant-numeric: tabular-nums; color: var(--ivory); }
 .tier-price s { font-size: var(--t-sm); color: var(--dust); }
 @media (max-width: 420px) { .tier { padding: 12px; gap: 10px; } .tier-name { font-size: 1rem; } .tier-price b { font-size: 1.12rem; } }
-.save-pill { text-decoration: none; transition: box-shadow .3s, color .3s; }
-.save-pill:hover { box-shadow: inset 0 0 0 1px var(--gold); color: var(--ivory); }
 .total { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-top: 22px; font-size: var(--t-xs); font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--smoke); }
 .total b { font: 500 1.7rem/1 var(--f-display); letter-spacing: 0; text-transform: none; color: var(--ivory); }
 .buy-info .btn-xl { margin-top: 16px; }
@@ -648,7 +650,7 @@ h1 em, h2 em { font-style: italic; }
         <a href="#figures">Figures</a>
         <a href="#faq">Questions</a>
       </div>
-      <a class="btn btn-gold btn-sm" data-buy href="https://shop.doncollection.store/cart/50720707608641:1">Order<span class="nav-price">&nbsp;· <span data-price>$49.99</span></span></a>
+      <a class="btn btn-gold btn-sm" data-buy href="https://shop.doncollection.store/cart/50720707608641:1">Order<span class="nav-price">&nbsp;· <span data-total>$49.99</span></span></a>
     </div>
   </nav>
 </header>
@@ -679,10 +681,27 @@ h1 em, h2 em { font-style: italic; }
         <p class="lede">Every night from December 1 to Christmas Eve, you open one sealed drawer. Inside is a collectible figure or a miniature prop from the world of a 1940s crime family. By the 24th, the whole family is together on your shelf.</p>
         <div class="price-row">
           <span class="price" data-price>$49.99</span>
-          <a class="per-night save-pill" href="#buy" data-save-pill>Bundles: save up to <b>$30</b></a>
+        </div>
+        <div class="tiers tiers-hero" role="radiogroup" aria-labelledby="tierHLabel">
+          <p class="tiers-label" id="tierHLabel">Save more when you buy more</p>
+          <label class="tier" for="tierH1">
+            <input class="tier-input" type="radio" name="tierHero" id="tierH1" value="1" checked>
+            <span class="tier-main"><span class="tier-name">Try One</span><span class="tier-sub">Perfect for trying it out</span></span>
+            <span class="tier-price"><b>$49.99</b></span>
+          </label>
+          <label class="tier" for="tierH2">
+            <input class="tier-input" type="radio" name="tierHero" id="tierH2" value="2">
+            <span class="tier-main"><span class="tier-name">Buy 2 and Save <em class="tier-badge">Recommended</em></span><span class="tier-sub">$44.99 each · <b>You save $10</b></span></span>
+            <span class="tier-price"><b>$89.98</b><s>$99.98</s></span>
+          </label>
+          <label class="tier" for="tierH3">
+            <input class="tier-input" type="radio" name="tierHero" id="tierH3" value="3">
+            <span class="tier-main"><span class="tier-name">Buy 3 and Save Even More</span><span class="tier-sub">$39.99 each · <b>You save $30</b></span></span>
+            <span class="tier-price"><b>$119.97</b><s>$149.97</s></span>
+          </label>
         </div>
         <div class="cta-row" id="heroCta">
-          <a class="btn btn-gold btn-lg" data-buy href="https://shop.doncollection.store/cart/50720707608641:1">Order the calendar</a>
+          <a class="btn btn-gold btn-lg" data-buy href="https://shop.doncollection.store/cart/50720707608641:1">Order · <span data-total>$49.99</span></a>
           <a class="btn btn-ghost btn-lg" href="#doors">Try a door</a>
         </div>
         <ul class="trust">
@@ -750,7 +769,7 @@ h1 em, h2 em { font-style: italic; }
       <div class="door-grid" id="doorGrid"></div>
       <div class="doors-cta">
         <p>Order early. The first door opens on December 1.</p>
-        <a class="btn btn-gold" data-buy href="https://shop.doncollection.store/cart/50720707608641:1">Order the calendar · <span data-price>$49.99</span></a>
+        <a class="btn btn-gold" data-buy href="https://shop.doncollection.store/cart/50720707608641:1">Order the calendar · <span data-total>$49.99</span></a>
       </div>
     </div>
   </section>
@@ -852,26 +871,26 @@ h1 em, h2 em { font-style: italic; }
             <li>Black and gold presentation box that opens like a book</li>
             <li>Free shipping to every country</li>
           </ul>
-          <div class="tiers" role="radiogroup" aria-labelledby="tiersLabel">
-            <p class="tiers-label" id="tiersLabel">Save more when you buy more</p>
+          <div class="tiers" role="radiogroup" aria-labelledby="tierLabel">
+            <p class="tiers-label" id="tierLabel">Save more when you buy more</p>
             <label class="tier" for="tier1">
-              <input type="radio" name="tier" id="tier1" value="1" checked>
+              <input class="tier-input" type="radio" name="tier" id="tier1" value="1" checked>
               <span class="tier-main"><span class="tier-name">Try One</span><span class="tier-sub">Perfect for trying it out</span></span>
               <span class="tier-price"><b>$49.99</b></span>
             </label>
             <label class="tier" for="tier2">
-              <input type="radio" name="tier" id="tier2" value="2">
+              <input class="tier-input" type="radio" name="tier" id="tier2" value="2">
               <span class="tier-main"><span class="tier-name">Buy 2 and Save <em class="tier-badge">Recommended</em></span><span class="tier-sub">$44.99 each · <b>You save $10</b></span></span>
               <span class="tier-price"><b>$89.98</b><s>$99.98</s></span>
             </label>
             <label class="tier" for="tier3">
-              <input type="radio" name="tier" id="tier3" value="3">
+              <input class="tier-input" type="radio" name="tier" id="tier3" value="3">
               <span class="tier-main"><span class="tier-name">Buy 3 and Save Even More</span><span class="tier-sub">$39.99 each · <b>You save $30</b></span></span>
               <span class="tier-price"><b>$119.97</b><s>$149.97</s></span>
             </label>
           </div>
           <p class="total">Total <b id="total">$49.99</b></p>
-          <a class="btn btn-gold btn-xl" data-buy data-buy-qty href="https://shop.doncollection.store/cart/50720707608641:1">Continue to secure checkout</a>
+          <a class="btn btn-gold btn-xl" data-buy href="https://shop.doncollection.store/cart/50720707608641:1">Continue to secure checkout</a>
           <p class="fine">You finish your order on our secure Shopify checkout, and shipping is free to every country.</p>
         </div>
       </div>
@@ -944,7 +963,7 @@ h1 em, h2 em { font-style: italic; }
         <p>Seat the family before the first door opens.</p>
       </div>
       <div class="finale-cta" data-rv style="--d:1">
-        <a class="btn btn-gold btn-lg" data-buy href="https://shop.doncollection.store/cart/50720707608641:1">Order the calendar · <span data-price>$49.99</span></a>
+        <a class="btn btn-gold btn-lg" data-buy href="https://shop.doncollection.store/cart/50720707608641:1">Order the calendar · <span data-total>$49.99</span></a>
         <small data-countline>The first door opens in 41 days</small>
       </div>
     </div>
@@ -979,7 +998,7 @@ h1 em, h2 em { font-style: italic; }
     <div>
       <p class="bb-name">Don Advent Calendar</p>
     </div>
-    <a class="btn btn-gold" data-buy tabindex="-1" href="https://shop.doncollection.store/cart/50720707608641:1">Order · <span data-price>$49.99</span></a>
+    <a class="btn btn-gold" data-buy tabindex="-1" href="https://shop.doncollection.store/cart/50720707608641:1">Order · <span data-total>$49.99</span></a>
   </div>
 </div>
 
@@ -1068,16 +1087,15 @@ h1 em, h2 em { font-style: italic; }
   let qty = 1;
   function syncLinks() {
     $$('[data-buy]').forEach((a) => {
-      a.href = checkoutUrl(a.hasAttribute('data-buy-qty') ? qty : 1);
+      a.href = checkoutUrl(qty);
       if (inFrame) { a.target = '_blank'; a.rel = 'noopener'; }
     });
   }
   const totalEl = $('#total');
   const cents = (v) => Math.round(v * 100) / 100;
-  const tierInputs = $$('input[name="tier"]');
+  const tierInputs = $$('input.tier-input');
   STORE.bundles.forEach((b) => {
-    const input = tierInputs.find((r) => Number(r.value) === b.qty);
-    if (!input) return;
+    tierInputs.filter((r) => Number(r.value) === b.qty).forEach((input) => {
     const card = input.closest('.tier');
     const save = cents((STORE.price - b.unit) * b.qty);
     card.querySelector('.tier-name').innerHTML = '';
@@ -1090,14 +1108,15 @@ h1 em, h2 em { font-style: italic; }
     pr.innerHTML = '<b></b>' + (save > 0 ? '<s></s>' : '');
     pr.querySelector('b').textContent = money(cents(b.unit * b.qty));
     if (save > 0) pr.querySelector('s').textContent = money(cents(STORE.price * b.qty));
+    });
   });
-  const best = Math.max(...STORE.bundles.map((b) => cents((STORE.price - b.unit) * b.qty)));
-  $$('[data-save-pill] b').forEach((el) => { el.textContent = money(best); });
   function setQty(n) {
     qty = n;
     const b = STORE.bundles.find((x) => x.qty === n) || { qty: n, unit: STORE.price };
-    totalEl.textContent = money(cents(b.unit * n));
-    tierInputs.forEach((r) => r.closest('.tier').classList.toggle('on', r.checked));
+    const total = money(cents(b.unit * n));
+    totalEl.textContent = total;
+    $$('[data-total]').forEach((el) => { el.textContent = total; });
+    tierInputs.forEach((r) => { r.checked = Number(r.value) === n; r.closest('.tier').classList.toggle('on', r.checked); });
     syncLinks();
   }
   tierInputs.forEach((r) => r.addEventListener('change', () => setQty(Number(r.value))));
