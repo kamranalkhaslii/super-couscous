@@ -69,7 +69,7 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; }
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+html { -webkit-text-size-adjust: 100%; }
 body {
   margin: 0;
   background: var(--ink);
@@ -956,6 +956,28 @@ h1 em, h2 em { font-style: italic; }
 <script>
 (() => {
   'use strict';
+
+  /* Scroll position: a refresh always starts at the top. In-page links scroll smoothly
+     without adding #section to the address, so a later refresh has nothing to jump to. */
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  const navType = (() => { try { return performance.getEntriesByType('navigation')[0].type; } catch (e) { return ''; } })();
+  const goTop = () => window.scrollTo(0, 0);
+  if (navType === 'reload' || navType === 'back_forward' || !location.hash) {
+    if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+    goTop();
+    window.addEventListener('load', goTop);
+  }
+  window.addEventListener('pageshow', (e) => { if (e.persisted) goTop(); });
+  const smoothOK = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.addEventListener('click', (e) => {
+    const a = e.target.closest('a[href^="#"]');
+    if (!a) return;
+    const id = a.getAttribute('href').slice(1);
+    const target = id ? document.getElementById(id) : null;
+    if (!target) return;
+    e.preventDefault();
+    target.scrollIntoView({ behavior: smoothOK ? 'smooth' : 'auto', block: 'start' });
+  });
 
   /* Store settings, taken from Shopify. Change them here if the price or product changes. */
   const STORE = {
