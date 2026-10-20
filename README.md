@@ -1,7 +1,11 @@
 # Don Collection – Don Advent Calendar
 
-One-page sales site for the Don Advent Calendar. Every buy button goes straight to the Shopify checkout at shop.doncollection.store.
+Sales site for the Don Advent Calendar, served at https://doncollection.store from Cloudflare Pages.
+Every buy button goes to the Shopify checkout at https://shop.doncollection.store.
 
-- `index.html` is the whole site: styles, scripts and images are all inside it.
-- To change the price, product or contact email, edit the `STORE` block near the bottom of `index.html`.
-- To publish with GitHub Pages: Settings → Pages → Deploy from branch → `main` / root.
+- `index.html` – the page. Change the price, product or contact email in the `STORE` block near the bottom.
+- `images/` – product photos.
+- `robots.txt`, `sitemap.xml`, `og-image.jpg`, favicons – search and sharing.
+- `_headers` – Cloudflare Pages caching rules.
+
+Cloudflare Pages settings: Framework preset **None**, build command **empty**, output directory **/**.
