@@ -478,13 +478,34 @@ h1 em, h2 em { font-style: italic; }
   background: rgba(201, 163, 90, .14) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 8.5l3 3 6-7' fill='none' stroke='%23f0d89c' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 12px no-repeat;
   box-shadow: inset 0 0 0 1px var(--line-2);
 }
-.qty { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px; margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--line); }
-.qty-label { font-size: var(--t-xs); font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--smoke); }
-.stepper { display: inline-flex; align-items: center; border-radius: 999px; box-shadow: inset 0 0 0 1px var(--line-2); }
-.stepper button { width: 44px; height: 44px; border: 0; border-radius: 50%; background: none; color: var(--gold-hi); font-size: 1.3rem; line-height: 1; cursor: pointer; }
-.stepper button:disabled { color: var(--dust); cursor: default; opacity: .6; }
-.stepper output { min-width: 34px; text-align: center; font: 500 1.25rem/1 var(--f-display); font-variant-numeric: tabular-nums; }
-.qty-hint { font-size: var(--t-sm); color: var(--smoke); }
+.tiers { display: grid; gap: 10px; margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--line); }
+.tiers-label { font-size: var(--t-xs); font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); }
+.tier {
+  position: relative; display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-radius: 12px; cursor: pointer;
+  box-shadow: inset 0 0 0 1px var(--line); transition: box-shadow .3s, background-color .3s, transform .3s var(--ease);
+}
+.tier:hover { box-shadow: inset 0 0 0 1px var(--line-2); }
+.tier input {
+  -webkit-appearance: none; appearance: none; flex: none; width: 20px; height: 20px; margin: 0; border-radius: 50%; cursor: pointer;
+  box-shadow: inset 0 0 0 1.5px var(--line-2); transition: box-shadow .25s, background-color .25s;
+}
+.tier input:checked { background: var(--gold-hi); box-shadow: inset 0 0 0 5px var(--ink-3), inset 0 0 0 6.5px var(--gold-hi); }
+.tier input:focus-visible { outline: 2px solid var(--gold-hi); outline-offset: 3px; }
+.tier.on { background: rgba(201, 163, 90, .09); box-shadow: inset 0 0 0 1.5px var(--gold); }
+.tier-main { display: grid; gap: 4px; flex: 1; min-width: 0; }
+.tier-name { font: 500 1.1rem/1.25 var(--f-display); color: var(--ivory); }
+.tier-badge {
+  display: inline-block; margin-left: 6px; padding: 4px 8px; border-radius: 999px; vertical-align: 2px; white-space: nowrap;
+  background: var(--rose); color: var(--ivory); font: 600 .58rem/1 var(--f-body); letter-spacing: .14em; text-transform: uppercase;
+}
+.tier-sub { font-size: var(--t-sm); color: var(--smoke); }
+.tier-sub b { font-weight: 600; color: var(--gold-hi); }
+.tier-price { display: grid; justify-items: end; gap: 3px; white-space: nowrap; }
+.tier-price b { font: 500 1.3rem/1 var(--f-display); font-variant-numeric: tabular-nums; color: var(--ivory); }
+.tier-price s { font-size: var(--t-sm); color: var(--dust); }
+@media (max-width: 420px) { .tier { padding: 12px; gap: 10px; } .tier-name { font-size: 1rem; } .tier-price b { font-size: 1.12rem; } }
+.save-pill { text-decoration: none; transition: box-shadow .3s, color .3s; }
+.save-pill:hover { box-shadow: inset 0 0 0 1px var(--gold); color: var(--ivory); }
 .total { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-top: 22px; font-size: var(--t-xs); font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--smoke); }
 .total b { font: 500 1.7rem/1 var(--f-display); letter-spacing: 0; text-transform: none; color: var(--ivory); }
 .buy-info .btn-xl { margin-top: 16px; }
@@ -658,6 +679,7 @@ h1 em, h2 em { font-style: italic; }
         <p class="lede">Every night from December 1 to Christmas Eve, you open one sealed drawer. Inside is a collectible figure or a miniature prop from the world of a 1940s crime family. By the 24th, the whole family is together on your shelf.</p>
         <div class="price-row">
           <span class="price" data-price>$49.99</span>
+          <a class="per-night save-pill" href="#buy" data-save-pill>Bundles: save up to <b>$30</b></a>
         </div>
         <div class="cta-row" id="heroCta">
           <a class="btn btn-gold btn-lg" data-buy href="https://shop.doncollection.store/cart/50720707608641:1">Order the calendar</a>
@@ -830,14 +852,23 @@ h1 em, h2 em { font-style: italic; }
             <li>Black and gold presentation box that opens like a book</li>
             <li>Free shipping to every country</li>
           </ul>
-          <div class="qty" role="group" aria-labelledby="qtyLabel">
-            <span class="qty-label" id="qtyLabel">Quantity</span>
-            <div class="stepper">
-              <button type="button" id="qtyMinus" aria-label="Remove one calendar">−</button>
-              <output id="qtyVal" aria-live="polite">1</output>
-              <button type="button" id="qtyPlus" aria-label="Add one calendar">+</button>
-            </div>
-            <span class="qty-hint" id="qtyHint">Buying for two? Gift one, keep one.</span>
+          <div class="tiers" role="radiogroup" aria-labelledby="tiersLabel">
+            <p class="tiers-label" id="tiersLabel">Save more when you buy more</p>
+            <label class="tier" for="tier1">
+              <input type="radio" name="tier" id="tier1" value="1" checked>
+              <span class="tier-main"><span class="tier-name">Try One</span><span class="tier-sub">Perfect for trying it out</span></span>
+              <span class="tier-price"><b>$49.99</b></span>
+            </label>
+            <label class="tier" for="tier2">
+              <input type="radio" name="tier" id="tier2" value="2">
+              <span class="tier-main"><span class="tier-name">Buy 2 and Save <em class="tier-badge">Recommended</em></span><span class="tier-sub">$44.99 each · <b>You save $10</b></span></span>
+              <span class="tier-price"><b>$89.98</b><s>$99.98</s></span>
+            </label>
+            <label class="tier" for="tier3">
+              <input type="radio" name="tier" id="tier3" value="3">
+              <span class="tier-main"><span class="tier-name">Buy 3 and Save Even More</span><span class="tier-sub">$39.99 each · <b>You save $30</b></span></span>
+              <span class="tier-price"><b>$119.97</b><s>$149.97</s></span>
+            </label>
           </div>
           <p class="total">Total <b id="total">$49.99</b></p>
           <a class="btn btn-gold btn-xl" data-buy data-buy-qty href="https://shop.doncollection.store/cart/50720707608641:1">Continue to secure checkout</a>
@@ -989,7 +1020,12 @@ h1 em, h2 em { font-style: italic; }
     currency: 'USD',
     discountCode: '',
     contactEmail: 'kamranalkhasli@gmail.com',
-    maxQty: 5,
+    /* Bundle offers, matching the Atlas bundle discount on Shopify (it applies by quantity at checkout) */
+    bundles: [
+      { qty: 1, name: 'Try One', note: 'Perfect for trying it out', unit: 49.99 },
+      { qty: 2, name: 'Buy 2 and Save', note: '', unit: 44.99, badge: 'Recommended' },
+      { qty: 3, name: 'Buy 3 and Save Even More', note: '', unit: 39.99 }
+    ],
     /* Real customer reviews only. The section stays hidden while this list is empty.
        Format: { name: 'Mark T.', place: 'Chicago, US', rating: 5, text: 'What they said.' } */
     reviews: []
@@ -1036,19 +1072,36 @@ h1 em, h2 em { font-style: italic; }
       if (inFrame) { a.target = '_blank'; a.rel = 'noopener'; }
     });
   }
-  const qv = $('#qtyVal'), minus = $('#qtyMinus'), plus = $('#qtyPlus'), totalEl = $('#total'), hint = $('#qtyHint');
+  const totalEl = $('#total');
+  const cents = (v) => Math.round(v * 100) / 100;
+  const tierInputs = $$('input[name="tier"]');
+  STORE.bundles.forEach((b) => {
+    const input = tierInputs.find((r) => Number(r.value) === b.qty);
+    if (!input) return;
+    const card = input.closest('.tier');
+    const save = cents((STORE.price - b.unit) * b.qty);
+    card.querySelector('.tier-name').innerHTML = '';
+    card.querySelector('.tier-name').append(b.name);
+    if (b.badge) { const em = document.createElement('em'); em.className = 'tier-badge'; em.textContent = b.badge; card.querySelector('.tier-name').append(' ', em); }
+    const sub = card.querySelector('.tier-sub');
+    if (save > 0) { sub.innerHTML = ''; sub.append(money(b.unit) + ' each · '); const strong = document.createElement('b'); strong.textContent = 'You save ' + money(save); sub.append(strong); }
+    else sub.textContent = b.note;
+    const pr = card.querySelector('.tier-price');
+    pr.innerHTML = '<b></b>' + (save > 0 ? '<s></s>' : '');
+    pr.querySelector('b').textContent = money(cents(b.unit * b.qty));
+    if (save > 0) pr.querySelector('s').textContent = money(cents(STORE.price * b.qty));
+  });
+  const best = Math.max(...STORE.bundles.map((b) => cents((STORE.price - b.unit) * b.qty)));
+  $$('[data-save-pill] b').forEach((el) => { el.textContent = money(best); });
   function setQty(n) {
-    qty = Math.max(1, Math.min(STORE.maxQty, n));
-    qv.textContent = String(qty);
-    minus.disabled = qty <= 1;
-    plus.disabled = qty >= STORE.maxQty;
-    totalEl.textContent = money(Math.round(STORE.price * qty * 100) / 100);
-    hint.textContent = qty === 1 ? 'Buying for two? Gift one, keep one.' : qty === 2 ? 'One to give, one to keep.' : qty + ' calendars, one checkout.';
+    qty = n;
+    const b = STORE.bundles.find((x) => x.qty === n) || { qty: n, unit: STORE.price };
+    totalEl.textContent = money(cents(b.unit * n));
+    tierInputs.forEach((r) => r.closest('.tier').classList.toggle('on', r.checked));
     syncLinks();
   }
-  minus.addEventListener('click', () => setQty(qty - 1));
-  plus.addEventListener('click', () => setQty(qty + 1));
-  setQty(1);
+  tierInputs.forEach((r) => r.addEventListener('change', () => setQty(Number(r.value))));
+  setQty(Number((tierInputs.find((r) => r.checked) || { value: 1 }).value));
 
   /* Advent timing, in the visitor's own time zone */
   function advent(now) {
