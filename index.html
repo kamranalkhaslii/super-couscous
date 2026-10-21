@@ -513,6 +513,9 @@ h1 em, h2 em { font-style: italic; }
 .buy-info .btn-xl { margin-top: 16px; }
 .fine { margin-top: 14px; font-size: var(--t-sm); line-height: 1.5; color: var(--dust); }
 
+.checkout-note { flex-basis: 100%; margin-top: 10px; font-size: var(--t-sm); color: var(--rose-hi); }
+.btn[aria-busy="true"] { cursor: progress; opacity: .85; }
+
 /* ---------- Reviews (shown only when real reviews are added) ---------- */
 .reviews-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 18px; margin-top: 40px; }
 .review { padding: 24px; border-radius: 12px; background: var(--ink-2); box-shadow: inset 0 0 0 1px var(--line); }
@@ -683,21 +686,21 @@ h1 em, h2 em { font-style: italic; }
           <span class="price" data-price>$49.99</span>
         </div>
         <div class="tiers tiers-hero" role="radiogroup" aria-labelledby="tierHLabel">
-          <p class="tiers-label" id="tierHLabel">Save more when you buy more</p>
+          <p class="tiers-label" id="tierHLabel">How many calendars?</p>
           <label class="tier" for="tierH1">
             <input class="tier-input" type="radio" name="tierHero" id="tierH1" value="1" checked>
-            <span class="tier-main"><span class="tier-name">Try One</span><span class="tier-sub">Perfect for trying it out</span></span>
+            <span class="tier-main"><span class="tier-name">1 calendar</span><span class="tier-sub">One to open this December</span></span>
             <span class="tier-price"><b>$49.99</b></span>
           </label>
           <label class="tier" for="tierH2">
             <input class="tier-input" type="radio" name="tierHero" id="tierH2" value="2">
-            <span class="tier-main"><span class="tier-name">Buy 2 and Save <em class="tier-badge">Recommended</em></span><span class="tier-sub">$44.99 each · <b>You save $10</b></span></span>
-            <span class="tier-price"><b>$89.98</b><s>$99.98</s></span>
+            <span class="tier-main"><span class="tier-name">2 calendars <em class="tier-badge">Gift one</em></span><span class="tier-sub">One to keep, one to give</span></span>
+              <span class="tier-price"><b>$99.98</b></span>
           </label>
           <label class="tier" for="tierH3">
             <input class="tier-input" type="radio" name="tierHero" id="tierH3" value="3">
-            <span class="tier-main"><span class="tier-name">Buy 3 and Save Even More</span><span class="tier-sub">$39.99 each · <b>You save $30</b></span></span>
-            <span class="tier-price"><b>$119.97</b><s>$149.97</s></span>
+            <span class="tier-main"><span class="tier-name">3 calendars</span><span class="tier-sub">For the whole family</span></span>
+              <span class="tier-price"><b>$149.97</b></span>
           </label>
         </div>
         <div class="cta-row" id="heroCta">
@@ -872,21 +875,21 @@ h1 em, h2 em { font-style: italic; }
             <li>Free shipping to every country</li>
           </ul>
           <div class="tiers" role="radiogroup" aria-labelledby="tierLabel">
-            <p class="tiers-label" id="tierLabel">Save more when you buy more</p>
+            <p class="tiers-label" id="tierLabel">How many calendars?</p>
             <label class="tier" for="tier1">
               <input class="tier-input" type="radio" name="tier" id="tier1" value="1" checked>
-              <span class="tier-main"><span class="tier-name">Try One</span><span class="tier-sub">Perfect for trying it out</span></span>
+              <span class="tier-main"><span class="tier-name">1 calendar</span><span class="tier-sub">One to open this December</span></span>
               <span class="tier-price"><b>$49.99</b></span>
             </label>
             <label class="tier" for="tier2">
               <input class="tier-input" type="radio" name="tier" id="tier2" value="2">
-              <span class="tier-main"><span class="tier-name">Buy 2 and Save <em class="tier-badge">Recommended</em></span><span class="tier-sub">$44.99 each · <b>You save $10</b></span></span>
-              <span class="tier-price"><b>$89.98</b><s>$99.98</s></span>
+              <span class="tier-main"><span class="tier-name">2 calendars <em class="tier-badge">Gift one</em></span><span class="tier-sub">One to keep, one to give</span></span>
+              <span class="tier-price"><b>$99.98</b></span>
             </label>
             <label class="tier" for="tier3">
               <input class="tier-input" type="radio" name="tier" id="tier3" value="3">
-              <span class="tier-main"><span class="tier-name">Buy 3 and Save Even More</span><span class="tier-sub">$39.99 each · <b>You save $30</b></span></span>
-              <span class="tier-price"><b>$119.97</b><s>$149.97</s></span>
+              <span class="tier-main"><span class="tier-name">3 calendars</span><span class="tier-sub">For the whole family</span></span>
+              <span class="tier-price"><b>$149.97</b></span>
             </label>
           </div>
           <p class="total">Total <b id="total">$49.99</b></p>
@@ -1033,17 +1036,22 @@ h1 em, h2 em { font-style: italic; }
   const STORE = {
     domain: 'shop.doncollection.store',
     productHandle: 'don-advent-calendar',
+    productId: '10358354051137',
+    productTitle: 'Don Advent Calendar',
+    /* Checkout runs on Pendym (cards via Whop) at checkout.doncollection.store */
+    pendym: { endpoint: 'https://pendym.com/api/handoff', storeId: 'cmveyr0cs0003i606a2r7ibj9' },
     variantId: '50720707608641',
     price: 49.99,
     compareAtPrice: null,
     currency: 'USD',
     discountCode: '',
     contactEmail: 'kamranalkhasli@gmail.com',
-    /* Bundle offers, matching the Atlas bundle discount on Shopify (it applies by quantity at checkout) */
+    /* Quantity choices. Each unit price must match what the Pendym checkout charges.
+       To bring back bundle savings, lower `unit` only once the checkout applies the same discount. */
     bundles: [
-      { qty: 1, name: 'Try One', note: 'Perfect for trying it out', unit: 49.99 },
-      { qty: 2, name: 'Buy 2 and Save', note: '', unit: 44.99, badge: 'Recommended' },
-      { qty: 3, name: 'Buy 3 and Save Even More', note: '', unit: 39.99 }
+      { qty: 1, name: '1 calendar', note: 'One to open this December', unit: 49.99 },
+      { qty: 2, name: '2 calendars', note: 'One to keep, one to give', unit: 49.99, badge: 'Gift one' },
+      { qty: 3, name: '3 calendars', note: 'For the whole family', unit: 49.99 }
     ],
     /* Real customer reviews only. The section stays hidden while this list is empty.
        Format: { name: 'Mark T.', place: 'Chicago, US', rating: 5, text: 'What they said.' } */
@@ -1091,6 +1099,63 @@ h1 em, h2 em { font-style: italic; }
       if (inFrame) { a.target = '_blank'; a.rel = 'noopener'; }
     });
   }
+  /* Pendym handoff: the order buttons post the chosen quantity to Pendym, which checks the
+     item and price against Shopify and answers with the checkout page on checkout.doncollection.store. */
+  function visitorId() {
+    try {
+      let id = localStorage.getItem('sc_visitor_id');
+      if (!id) { id = 'v_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 10); localStorage.setItem('sc_visitor_id', id); }
+      return id;
+    } catch (e) { return 'v_anon'; }
+  }
+  let handing = false;
+  function checkoutNote(btn, text) {
+    let note = btn.parentElement.querySelector('.checkout-note');
+    if (!note) { note = document.createElement('p'); note.className = 'checkout-note'; note.setAttribute('role', 'status'); btn.insertAdjacentElement('afterend', note); }
+    note.textContent = text;
+    note.hidden = !text;
+  }
+  function startCheckout(btn) {
+    if (handing) return;
+    handing = true;
+    const label = btn.innerHTML;
+    btn.setAttribute('aria-busy', 'true');
+    btn.textContent = 'Opening checkout…';
+    checkoutNote(btn, '');
+    const cents = Math.round(STORE.price * 100);
+    const item = {
+      id: Number(STORE.variantId), variant_id: Number(STORE.variantId), product_id: Number(STORE.productId),
+      quantity: qty, title: STORE.productTitle, product_title: STORE.productTitle, handle: STORE.productHandle,
+      price: cents, original_price: cents, final_price: cents, line_price: cents * qty, final_line_price: cents * qty,
+      requires_shipping: true, taxable: true, product_has_only_default_variant: true, properties: {}
+    };
+    const body = {
+      storeId: STORE.pendym.storeId,
+      shopifyCart: { currency: STORE.currency, item_count: qty, total_price: cents * qty, items_subtotal_price: cents * qty, total_discount: 0, requires_shipping: true, attributes: {}, items: [item] },
+      market: { country: null, currency: STORE.currency, locale: 'en' },
+      visitorId: visitorId()
+    };
+    const reset = (msg) => { handing = false; btn.removeAttribute('aria-busy'); btn.innerHTML = label; checkoutNote(btn, msg); };
+    const timer = setTimeout(() => reset('Checkout is taking longer than usual. Please tap the button again.'), 15000);
+    fetch(STORE.pendym.endpoint, { method: 'POST', mode: 'cors', credentials: 'omit', headers: { 'content-type': 'text/plain' }, body: JSON.stringify(body) })
+      .then((r) => r.json().catch(() => ({})))
+      .then((data) => {
+        clearTimeout(timer);
+        if (data && data.ok && typeof data.url === 'string' && /^https:\/\//.test(data.url)) { window.location.href = data.url; return; }
+        reset('Checkout could not open right now. Please try again in a moment.');
+      })
+      .catch(() => { clearTimeout(timer); reset('Checkout could not open. Check your connection and try again.'); });
+  }
+  window.addEventListener('pageshow', () => { handing = false; $$('[data-buy][aria-busy]').forEach((b) => b.removeAttribute('aria-busy')); });
+  if (!inFrame) {
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-buy]');
+      if (!btn || e.metaKey || e.ctrlKey || e.shiftKey) return;
+      e.preventDefault();
+      startCheckout(btn);
+    });
+  }
+
   const totalEl = $('#total');
   const cents = (v) => Math.round(v * 100) / 100;
   const tierInputs = $$('input.tier-input');
