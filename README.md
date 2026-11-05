@@ -1,7 +1,7 @@
 # Don Collection – Don Advent Calendar
 
 Sales site for the Don Advent Calendar, served at https://doncollection.store from Cloudflare Pages.
-Every buy button goes to the Shopify checkout at https://shop.doncollection.store.
+Orders are closed: the page has no order buttons or checkout.
 
 - `index.html` – the page. Change the price, product or contact email in the `STORE` block near the bottom.
 - `images/` – product photos.
